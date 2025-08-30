@@ -67,7 +67,7 @@ This creates an imbalance:
 
 ```bash
 # Clone the repo
-git clone https://github.com/your-username/foodsetu.git
+git clone https://github.com/RohanBisht33/Food-Setu.git
 
 # Go to project folder
 cd foodsetu
