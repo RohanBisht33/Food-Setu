@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Optimize Route - Food Setu</title>
+  <title>Order History - Food Setu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Settings Sidebar Animation */
@@ -19,34 +19,59 @@
     <nav class="mt-6 flex flex-col space-y-4">
       <a href="dashboard.html">📊 Dashboard</a>
       <a href="add-listing.html">➕ Add Food Listing</a>
-      <a href="waste-prediction.html">♻️ Waste Prediction</a>
-      <a href="optimize-route.html" class="font-bold text-green-600">🚚 Optimize Route</a>
+      <a href="order-history.html" class="font-bold text-green-600">📦 Order History</a>
+      <a href="optimize-route.html">🚚 Optimize Route</a>
       <a href="sponsorship.html">🤝 Sponsorship</a>
     </nav>
   </aside>
 
-  <!-- Main content -->
+  <!-- Main Content -->
   <main class="flex-1 p-8 overflow-y-auto">
-    <h1 class="text-3xl font-bold mb-6">🚚 Optimize Route</h1>
 
-    <!-- Map Embed -->
-    <div class="w-full h-96 rounded-lg overflow-hidden shadow-lg mb-6">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m28!1m12!1m3!1d7003.933257716527!2d77.2167219!3d28.6327664!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!4m13!3e0!4m3!3m2!1d28.6327664!2d77.2190!4m3!3m2!1d28.6351!2d77.2250!4m3!3m2!1d28.6300!2d77.2100!5e0!3m2!1sen!2sin!4v1234567890"
-        width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
-      </iframe>
+    <h1 class="text-3xl font-bold mb-6">📦 Your Order History</h1>
+
+    <!-- Orders List -->
+    <div class="space-y-4" id="ordersList">
+
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Pizza Heaven</h3>
+          <p class="text-gray-600">Items: Margherita, Coke</p>
+          <p class="text-gray-600">Total: ₹450</p>
+          <p class="text-gray-500 text-sm">Ordered on: 30 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">Delivered</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Burger Hub</h3>
+          <p class="text-gray-600">Items: Cheeseburger, Fries</p>
+          <p class="text-gray-600">Total: ₹320</p>
+          <p class="text-gray-500 text-sm">Ordered on: 30 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800">Pending</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
+      </div>
+
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Barbeque Nation</h3>
+          <p class="text-gray-600">Items: Paneer Tikka, Soft Drinks</p>
+          <p class="text-gray-600">Total: ₹600</p>
+          <p class="text-gray-500 text-sm">Ordered on: 29 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800">Cancelled</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
+      </div>
+
     </div>
 
-    <!-- Route Steps -->
-    <div class="bg-white p-6 rounded-lg shadow">
-      <h2 class="text-2xl font-bold mb-4">Pickup Plan</h2>
-      <ol class="list-decimal ml-6 space-y-2 text-gray-700">
-        <li>Start at <span class="font-semibold">Haldiram’s (Connaught Place)</span></li>
-        <li>Pickup from <span class="font-semibold">Bikanervala (Karol Bagh)</span></li>
-        <li>Deliver to <span class="font-semibold">NGO Shelter CP</span></li>
-      </ol>
-      <p class="mt-4 text-green-600 font-semibold">Estimated Time: 35 mins</p>
+    <div id="noOrders" class="mt-6 text-center text-gray-500 hidden">
+      You have no orders yet.
     </div>
+
   </main>
 
   <!-- Floating Left Sidebar (Chatbot + Settings) -->
@@ -87,7 +112,7 @@
   </div>
 
   <script>
-    // Chatbot toggle
+    // Chatbot
     const chatToggle = document.getElementById("chatToggle");
     const chatWindow = document.getElementById("chatWindow");
     const chatMessages = document.getElementById("chatMessages");
@@ -111,7 +136,7 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Settings Sidebar toggle
+    // Settings Sidebar
     const settingsBtn = document.getElementById("settingsBtn");
     const settingsSidebar = document.getElementById("settingsSidebar");
     const closeSettings = document.getElementById("closeSettings");
