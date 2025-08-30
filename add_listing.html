@@ -5,23 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Add Food Listing - Food Setu</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Settings Sidebar Animation */
+    #settingsSidebar { transition: transform 0.3s ease; transform: translateX(-100%); }
+    #settingsSidebar.show { transform: translateX(0); }
+  </style>
 </head>
 <body class="flex bg-gray-100">
 
-  <!-- Sidebar (reuse) -->
-  <aside class="w-64 bg-white shadow-lg p-6">
+  <!-- Sidebar -->
+  <aside class="w-64 bg-white shadow-lg p-6 sticky top-0 h-screen">
     <h2 class="text-2xl font-bold text-green-600">Food Setu</h2>
     <nav class="mt-6 flex flex-col space-y-4">
       <a href="dashboard.html">📊 Dashboard</a>
-      <a href="add_listing.html" class="font-bold text-green-600">➕ Add Food Listing</a>
-      <a href="waste_prediction.html">♻️ Waste Prediction</a>
-      <a href="optimize_route.html">🚚 Optimize Route</a>
-      <a href="sponsership.html">🤝 Sponsorship</a>
+      <a href="add-listing.html" class="font-bold text-green-600">➕ Add Food Listing</a>
+      <a href="waste-prediction.html">♻️ Waste Prediction</a>
+      <a href="optimize-route.html">🚚 Optimize Route</a>
+      <a href="sponsorship.html">🤝 Sponsorship</a>
     </nav>
   </aside>
 
-  <main class="flex-1 p-8">
-    <h1 class="text-3xl font-bold mb-6">Add Food Listing</h1>
+  <!-- Main content -->
+  <main class="flex-1 p-8 overflow-y-auto">
+    <h1 class="text-3xl font-bold mb-6">➕ Add Food Listing</h1>
     <form class="bg-white p-6 rounded-lg shadow space-y-4 max-w-lg">
       <input type="text" placeholder="Restaurant Name" class="w-full p-3 border rounded" required>
       <input type="text" placeholder="Food Item" class="w-full p-3 border rounded" required>
@@ -33,5 +39,76 @@
       </button>
     </form>
   </main>
+
+  <!-- Floating Left Sidebar (Chatbot + Settings) -->
+  <div class="fixed bottom-6 left-6 flex flex-col gap-4">
+    <!-- Chatbot Button -->
+    <button id="chatToggle" class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700">
+      💬 <span>Chatbot</span>
+    </button>
+
+    <!-- Settings Button -->
+    <button id="settingsBtn" class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800">
+      ⚙️ <span>Settings</span>
+    </button>
+  </div>
+
+  <!-- Chat Window -->
+  <div id="chatWindow" class="hidden fixed bottom-24 left-6 w-80 h-96 bg-white rounded-xl shadow-xl flex flex-col overflow-hidden">
+    <div class="bg-green-600 text-white p-3 font-bold">Food Setu Chatbot</div>
+    <div id="chatMessages" class="flex-1 p-3 overflow-y-auto text-sm space-y-2">
+      <div class="text-gray-600">👋 Hi! How can I help you today?</div>
+    </div>
+    <div class="p-3 border-t flex">
+      <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 border rounded-lg px-2 py-1 text-sm focus:outline-none">
+      <button onclick="sendMessage()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 text-sm">Send</button>
+    </div>
+  </div>
+
+  <!-- Settings Sidebar -->
+  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6">
+    <h2 class="text-xl font-bold mb-4">⚙️ Settings</h2>
+    <ul class="space-y-4">
+      <li><a href="#" class="text-gray-700 hover:text-green-600">👤 Profile Settings</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🔑 Login & Security</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🌙 Theme Preferences</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🔔 Notifications</a></li>
+    </ul>
+    <button id="closeSettings" class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Close</button>
+  </div>
+
+  <script>
+    // Chatbot toggle
+    const chatToggle = document.getElementById("chatToggle");
+    const chatWindow = document.getElementById("chatWindow");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    chatToggle.addEventListener("click", () => chatWindow.classList.toggle("hidden"));
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      const userMsg = document.createElement("div");
+      userMsg.className = "text-right text-sm text-blue-600";
+      userMsg.innerText = "You: " + message;
+      chatMessages.appendChild(userMsg);
+      setTimeout(() => {
+        const botMsg = document.createElement("div");
+        botMsg.className = "text-gray-600 text-sm";
+        botMsg.innerText = "🤖 Bot: Thanks for your message! (demo reply)";
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+      chatInput.value = "";
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Settings Sidebar toggle
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsSidebar = document.getElementById("settingsSidebar");
+    const closeSettings = document.getElementById("closeSettings");
+    settingsBtn.addEventListener("click", () => settingsSidebar.classList.add("show"));
+    closeSettings.addEventListener("click", () => settingsSidebar.classList.remove("show"));
+  </script>
+
 </body>
 </html>
