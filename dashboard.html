@@ -56,7 +56,7 @@
 
         <!-- Claims Made -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
-          <h3 class="text-4xl font-bold text-purple-600">950+</h3>
+          <h3 id="claimsCount" class="text-4xl font-bold text-purple-600">950+</h3>
           <p class="text-gray-600 mt-2">Claims Made</p>
         </div>
       </div>
@@ -65,7 +65,7 @@
     <!-- Recent Food Listings -->
     <section class="p-8">
       <h2 class="text-3xl font-bold mb-6">Recent Food Listings</h2>
-      <div class="space-y-4">
+      <div class="space-y-4" id="foodList">
 
         <!-- Card 1 -->
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
@@ -73,7 +73,7 @@
             <h3 class="text-lg font-semibold">Haldiram’s - Connaught Place</h3>
             <p class="text-gray-600">50 Meals · Expiry: <span class="text-red-600 font-semibold">2 hrs left</span></p>
           </div>
-          <span class="bg-green-100 text-green-700 px-4 py-1 rounded-lg text-sm">Available</span>
+          <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
         <!-- Card 2 -->
@@ -82,17 +82,18 @@
             <h3 class="text-lg font-semibold">Bikanervala - Karol Bagh</h3>
             <p class="text-gray-600">30 Meals · Expiry: <span class="text-yellow-600 font-semibold">5 hrs left</span></p>
           </div>
-          <span class="bg-green-100 text-green-700 px-4 py-1 rounded-lg text-sm">Available</span>
+          <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
         <!-- Card 3 -->
-        <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center opacity-70">
           <div>
             <h3 class="text-lg font-semibold">Barbeque Nation - Noida</h3>
             <p class="text-gray-600">70 Meals · Expiry: <span class="text-gray-500 font-semibold">Expired</span></p>
           </div>
           <span class="bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg text-sm">Claimed</span>
         </div>
+
       </div>
     </section>
 
@@ -125,5 +126,24 @@
     </section>
 
   </main>
+
+  <script>
+    let claims = 950; // initial claims
+
+    function claimFood(button) {
+      const card = button.parentElement;
+
+      // Replace button with "Claimed"
+      button.remove();
+      const claimedTag = document.createElement("span");
+      claimedTag.className = "bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg text-sm";
+      claimedTag.innerText = "Claimed by You ✅";
+      card.appendChild(claimedTag);
+
+      // Update claims counter
+      claims++;
+      document.getElementById("claimsCount").innerText = claims + "+";
+    }
+  </script>
 </body>
 </html>
