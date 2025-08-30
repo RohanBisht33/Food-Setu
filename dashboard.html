@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Food Setu</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tooltip animation */
+    #chatTooltip {
+      opacity: 0;
+      transform: translateY(5px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    #chatTooltip.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    /* Settings Sidebar Animation */
+    #settingsSidebar {
+      transition: transform 0.3s ease;
+      transform: translateX(-100%);
+    }
+    #settingsSidebar.show {
+      transform: translateX(0);
+    }
+  </style>
 </head>
 <body class="flex bg-gray-100">
 
@@ -23,7 +43,7 @@
   <!-- Main -->
   <main class="flex-1 overflow-y-auto">
 
-    <!-- Map Section (Hero) -->
+    <!-- Map Section -->
     <section class="h-[500px] w-full">
       <iframe 
         src="https://www.openstreetmap.org/export/embed.html?bbox=77.1%2C28.6%2C77.3%2C28.7&layer=mapnik&marker=28.65%2C77.2"
@@ -36,25 +56,21 @@
       <h2 class="text-3xl font-bold mb-6">Impact Stats</h2>
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
 
-        <!-- Meals Shared -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-4xl font-bold text-green-600">12,540+</h3>
           <p class="text-gray-600 mt-2">Meals Shared</p>
         </div>
 
-        <!-- Active Donors -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-4xl font-bold text-blue-600">340+</h3>
           <p class="text-gray-600 mt-2">Active Donors</p>
         </div>
 
-        <!-- NGO Partners -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-4xl font-bold text-yellow-600">120+</h3>
           <p class="text-gray-600 mt-2">NGO Partners</p>
         </div>
 
-        <!-- Claims Made -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 id="claimsCount" class="text-4xl font-bold text-purple-600">950+</h3>
           <p class="text-gray-600 mt-2">Claims Made</p>
@@ -67,7 +83,6 @@
       <h2 class="text-3xl font-bold mb-6">Recent Food Listings</h2>
       <div class="space-y-4" id="foodList">
 
-        <!-- Card 1 -->
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
           <div>
             <h3 class="text-lg font-semibold">Haldiram’s - Connaught Place</h3>
@@ -76,7 +91,6 @@
           <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
-        <!-- Card 2 -->
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
           <div>
             <h3 class="text-lg font-semibold">Bikanervala - Karol Bagh</h3>
@@ -85,7 +99,6 @@
           <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
-        <!-- Card 3 -->
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center opacity-70">
           <div>
             <h3 class="text-lg font-semibold">Barbeque Nation - Noida</h3>
@@ -101,22 +114,16 @@
     <section class="p-8 bg-gray-50">
       <h2 class="text-3xl font-bold mb-6">🏆 Community Heroes</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <!-- Hero 1 -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-xl font-semibold">Tandoori Treats</h3>
           <p class="text-gray-600">120+ Meals Donated</p>
           <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-lg text-sm">🥇 Gold Contributor</span>
         </div>
-
-        <!-- Hero 2 -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-xl font-semibold">Green Garden</h3>
           <p class="text-gray-600">95+ Meals Donated</p>
           <span class="bg-gray-200 text-gray-700 px-3 py-1 rounded-lg text-sm">🥈 Silver Contributor</span>
         </div>
-
-        <!-- Hero 3 -->
         <div class="bg-white p-6 rounded-xl shadow-lg text-center">
           <h3 class="text-xl font-semibold">Spice Villa</h3>
           <p class="text-gray-600">78+ Meals Donated</p>
@@ -127,23 +134,93 @@
 
   </main>
 
-  <script>
-    let claims = 950; // initial claims
+  <!-- Floating Left Sidebar (Chatbot + Settings) -->
+  <div class="fixed bottom-6 left-6 flex flex-col gap-4">
+    <!-- Chatbot Button -->
+    <button id="chatToggle" class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700">
+      💬 <span>Chatbot</span>
+    </button>
 
+    <!-- Settings Button -->
+    <button id="settingsBtn" class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800">
+      ⚙️ <span>Settings</span>
+    </button>
+  </div>
+
+  <!-- Chat Window -->
+  <div id="chatWindow" class="hidden fixed bottom-24 left-6 w-80 h-96 bg-white rounded-xl shadow-xl flex flex-col overflow-hidden">
+    <div class="bg-green-600 text-white p-3 font-bold">Food Setu Chatbot</div>
+    <div id="chatMessages" class="flex-1 p-3 overflow-y-auto text-sm space-y-2">
+      <div class="text-gray-600">👋 Hi! How can I help you today?</div>
+    </div>
+    <div class="p-3 border-t flex">
+      <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 border rounded-lg px-2 py-1 text-sm focus:outline-none">
+      <button onclick="sendMessage()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 text-sm">Send</button>
+    </div>
+  </div>
+
+  <!-- Settings Sidebar -->
+  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6">
+    <h2 class="text-xl font-bold mb-4">⚙️ Settings</h2>
+    <ul class="space-y-4">
+      <li><a href="#" class="text-gray-700 hover:text-green-600">👤 Profile Settings</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🔑 Login & Security</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🌙 Theme Preferences</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600">🔔 Notifications</a></li>
+    </ul>
+    <button id="closeSettings" class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Close</button>
+  </div>
+
+  <script>
+    let claims = 950;
     function claimFood(button) {
       const card = button.parentElement;
-
-      // Replace button with "Claimed"
       button.remove();
       const claimedTag = document.createElement("span");
       claimedTag.className = "bg-yellow-100 text-yellow-700 px-4 py-1 rounded-lg text-sm";
       claimedTag.innerText = "Claimed by You ✅";
       card.appendChild(claimedTag);
-
-      // Update claims counter
       claims++;
       document.getElementById("claimsCount").innerText = claims + "+";
     }
+
+    // Chatbot
+    const chatToggle = document.getElementById("chatToggle");
+    const chatWindow = document.getElementById("chatWindow");
+    const chatMessages = document.getElementById("chatMessages");
+    const chatInput = document.getElementById("chatInput");
+    chatToggle.addEventListener("click", () => {
+      chatWindow.classList.toggle("hidden");
+    });
+    function sendMessage() {
+      const message = chatInput.value.trim();
+      if (!message) return;
+      const userMsg = document.createElement("div");
+      userMsg.className = "text-right text-sm text-blue-600";
+      userMsg.innerText = "You: " + message;
+      chatMessages.appendChild(userMsg);
+      setTimeout(() => {
+        const botMsg = document.createElement("div");
+        botMsg.className = "text-gray-600 text-sm";
+        botMsg.innerText = "🤖 Bot: Thanks for your message! (demo reply)";
+        chatMessages.appendChild(botMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+      chatInput.value = "";
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Settings
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsSidebar = document.getElementById("settingsSidebar");
+    const closeSettings = document.getElementById("closeSettings");
+    settingsSidebar.classList.remove("show"); // keep hidden initially
+    settingsBtn.addEventListener("click", () => {
+      settingsSidebar.classList.add("show");
+    });
+    closeSettings.addEventListener("click", () => {
+      settingsSidebar.classList.remove("show");
+    });
   </script>
 </body>
 </html>
