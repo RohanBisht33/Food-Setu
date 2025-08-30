@@ -1,23 +1,20 @@
-from flask import Flask, jsonify
 import joblib
-import numpy as np
+from flask import Flask, request, jsonify, render_template
 
 app = Flask(__name__)
 
-# Load trained model
+# load the trained model
 model = joblib.load("food_waste_model.pkl")
 
-@app.route("/predict")
-def predict():
-    # Predict for Sep–Dec (months 9–12)
-    future_months = np.arange(9, 13).reshape(-1, 1)
-    predictions = model.predict(future_months)
+@app.route("/")
+def home():
+    return render_template("index.html")
 
-    data = {
-        "months": ["Sep", "Oct", "Nov", "Dec"],
-        "predicted": [int(p) for p in predictions]
-    }
-    return jsonify(data)
+@app.route("/predict", methods=["POST"])
+def predict():
+    food_cooked = float(request.form["food_cooked"])
+    prediction = model.predict([[food_cooked]])[0]
+    return render_template("index.html", prediction=f"Food Saved: {prediction:.2f}")
 
 if __name__ == "__main__":
     app.run(debug=True)
