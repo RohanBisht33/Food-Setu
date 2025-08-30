@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Membership - Food Setu</title>
+  <title>Order History - Food Setu</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Settings Sidebar Animation */
@@ -19,58 +19,59 @@
     <nav class="mt-6 flex flex-col space-y-4">
       <a href="dashboard.html">📊 Dashboard</a>
       <a href="add-listing.html">➕ Add Food Listing</a>
-      <a href="waste-prediction.html">♻️ Waste Prediction</a>
+      <a href="order-history.html" class="font-bold text-green-600">📦 Order History</a>
       <a href="optimize-route.html">🚚 Optimize Route</a>
-      <a href="membership.html" class="font-bold text-green-600">🤝 Membership</a>
+      <a href="sponsorship.html">🤝 Sponsorship</a>
     </nav>
   </aside>
 
-  <!-- Main -->
+  <!-- Main Content -->
   <main class="flex-1 p-8 overflow-y-auto">
-    <h1 class="text-3xl font-bold mb-6">Become a Member</h1>
-    <p class="mb-6 text-gray-600">Support our mission: <span class="text-green-600 font-bold">Zero Hunger, Zero Waste.</span></p>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <h1 class="text-3xl font-bold mb-6">📦 Your Order History</h1>
 
-      <!-- Bronze -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-gray-200">
-        <h2 class="text-xl font-bold text-yellow-600 mb-2">🥉 Bronze</h2>
-        <p class="text-gray-600 mb-4">For individuals</p>
-        <p class="text-2xl font-bold mb-4">₹5,000 / year</p>
-        <ul class="text-gray-600 mb-6 space-y-2 text-sm">
-          <li>✔️ Member Badge</li>
-          <li>✔️ Monthly Impact Report</li>
-        </ul>
-        <button class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600">Join Now</button>
+    <!-- Orders List -->
+    <div class="space-y-4" id="ordersList">
+
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Pizza Heaven</h3>
+          <p class="text-gray-600">Items: Margherita, Coke</p>
+          <p class="text-gray-600">Total: ₹450</p>
+          <p class="text-gray-500 text-sm">Ordered on: 30 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-green-100 text-green-800">Delivered</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
       </div>
 
-      <!-- Silver -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border-2 border-green-600">
-        <h2 class="text-xl font-bold text-gray-700 mb-2">🥈 Silver</h2>
-        <p class="text-gray-600 mb-4">For small businesses</p>
-        <p class="text-2xl font-bold mb-4">₹25,000 / year</p>
-        <ul class="text-gray-600 mb-6 space-y-2 text-sm">
-          <li>✔️ All Bronze benefits</li>
-          <li>✔️ Logo on our website</li>
-          <li>✔️ Priority NGO Matching</li>
-        </ul>
-        <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Join Now</button>
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Burger Hub</h3>
+          <p class="text-gray-600">Items: Cheeseburger, Fries</p>
+          <p class="text-gray-600">Total: ₹320</p>
+          <p class="text-gray-500 text-sm">Ordered on: 30 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-yellow-100 text-yellow-800">Pending</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
       </div>
 
-      <!-- Gold -->
-      <div class="bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center border border-gray-200">
-        <h2 class="text-xl font-bold text-yellow-500 mb-2">🥇 Gold</h2>
-        <p class="text-gray-600 mb-4">For large enterprises</p>
-        <p class="text-2xl font-bold mb-4">₹1,00,000 / year</p>
-        <ul class="text-gray-600 mb-6 space-y-2 text-sm">
-          <li>✔️ All Silver benefits</li>
-          <li>✔️ Featured Partner Status</li>
-          <li>✔️ CSR Collaboration Report</li>
-        </ul>
-        <button class="bg-yellow-500 text-white px-6 py-2 rounded-lg hover:bg-yellow-600">Join Now</button>
+      <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
+        <div>
+          <h3 class="text-lg font-semibold">Barbeque Nation</h3>
+          <p class="text-gray-600">Items: Paneer Tikka, Soft Drinks</p>
+          <p class="text-gray-600">Total: ₹600</p>
+          <p class="text-gray-500 text-sm">Ordered on: 29 Aug, 2025</p>
+          <span class="inline-block mt-2 px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-800">Cancelled</span>
+        </div>
+        <button class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">View Details</button>
       </div>
 
     </div>
+
+    <div id="noOrders" class="mt-6 text-center text-gray-500 hidden">
+      You have no orders yet.
+    </div>
+
   </main>
 
   <!-- Floating Left Sidebar (Chatbot + Settings) -->
@@ -111,7 +112,7 @@
   </div>
 
   <script>
-    // Chatbot toggle
+    // Chatbot
     const chatToggle = document.getElementById("chatToggle");
     const chatWindow = document.getElementById("chatWindow");
     const chatMessages = document.getElementById("chatMessages");
@@ -135,7 +136,7 @@
       chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Settings Sidebar toggle
+    // Settings Sidebar
     const settingsBtn = document.getElementById("settingsBtn");
     const settingsSidebar = document.getElementById("settingsSidebar");
     const closeSettings = document.getElementById("closeSettings");
