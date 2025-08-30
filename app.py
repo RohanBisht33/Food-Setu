@@ -1,20 +1,24 @@
-import joblib
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, render_template_string
+import pickle
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='.')
 
-# load the trained model
+import joblib  
+
+# load
 model = joblib.load("food_waste_model.pkl")
 
-@app.route("/")
+
+@app.route('/')
 def home():
-    return render_template("index.html")
+    with open("index.html", "r") as f:
+        return f.read()
 
-@app.route("/predict", methods=["POST"])
+@app.route('/predict', methods=['POST'])
 def predict():
-    food_cooked = float(request.form["food_cooked"])
+    food_cooked = float(request.form['food_cooked'])
     prediction = model.predict([[food_cooked]])[0]
-    return render_template("index.html", prediction=f"Food Saved: {prediction:.2f}")
+    return f"Prediction: {prediction}"
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     app.run(debug=True)
