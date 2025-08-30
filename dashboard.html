@@ -24,6 +24,14 @@
     #settingsSidebar.show {
       transform: translateX(0);
     }
+    /* Scroll Down Indicator */
+    .scroll-indicator {
+      animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
   </style>
 </head>
 <body class="flex bg-gray-100">
@@ -33,10 +41,10 @@
     <h2 class="text-2xl font-bold text-green-600">Food Setu</h2>
     <nav class="mt-6 flex flex-col space-y-4">
       <a href="dashboard.html" class="font-bold text-green-600">📊 Dashboard</a>
-      <a href="add_listing.html">➕ Add Food Listing</a>
-      <a href="waste_prediction.html">♻️ Waste Prediction</a>
-      <a href="optimize_route.html">🚚 Optimize Route</a>
-      <a href="sponsership.html">🤝 Sponsorship</a>
+      <a href="add-listing.html">➕ Add Food Listing</a>
+      <a href="order-history.html">📦 Order History</a>
+      <a href="optimize-route.html">🚚 Optimize Route</a>
+      <a href="sponsorship.html">🤝 Sponsorship</a>
     </nav>
   </aside>
 
@@ -44,12 +52,20 @@
   <main class="flex-1 overflow-y-auto">
 
     <!-- Map Section -->
-    <section class="h-[500px] w-full">
+    <section class="relative h-[500px] w-full">
       <iframe 
         src="https://www.openstreetmap.org/export/embed.html?bbox=77.1%2C28.6%2C77.3%2C28.7&layer=mapnik&marker=28.65%2C77.2"
         class="w-full h-full border-0 rounded-b-lg shadow-lg">
       </iframe>
     </section>
+
+    <!-- Scroll Indicator BELOW map (Centered) -->
+    <div class="flex justify-center mt-4">
+      <div id="scrollBtn" 
+           class="bg-white px-6 py-2 rounded-full shadow-md cursor-pointer hover:bg-green-600 hover:text-white scroll-indicator">
+        ⬇️ Scroll Down
+      </div>
+    </div>
 
     <!-- Stats Section -->
     <section class="p-8 bg-gray-50">
@@ -214,12 +230,18 @@
     const settingsBtn = document.getElementById("settingsBtn");
     const settingsSidebar = document.getElementById("settingsSidebar");
     const closeSettings = document.getElementById("closeSettings");
-    settingsSidebar.classList.remove("show"); // keep hidden initially
+    settingsSidebar.classList.remove("show"); 
     settingsBtn.addEventListener("click", () => {
       settingsSidebar.classList.add("show");
     });
     closeSettings.addEventListener("click", () => {
       settingsSidebar.classList.remove("show");
+    });
+
+    // Scroll Down Smooth
+    const scrollBtn = document.getElementById("scrollBtn");
+    scrollBtn.addEventListener("click", () => {
+      window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
     });
   </script>
 </body>
