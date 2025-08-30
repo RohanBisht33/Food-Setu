@@ -7,8 +7,66 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* Settings Sidebar Animation */
-    #settingsSidebar { transition: transform 0.3s ease; transform: translateX(-100%); }
-    #settingsSidebar.show { transform: translateX(0); }
+    #settingsSidebar {
+      transition: transform 0.3s ease;
+      transform: translateX(-100%);
+    }
+  
+    #settingsSidebar.show {
+      transform: translateX(0);
+    }
+  
+    /* Chat Options Animation */
+    .chat-option {
+      transition: all 0.2s ease;
+    }
+  
+    .chat-option:hover {
+      transform: translateX(4px);
+      background-color: #f0f9ff;
+    }
+  
+    /* Typing indicator animation */
+    .typing-dots {
+      display: inline-block;
+    }
+  
+    .typing-dots span {
+      display: inline-block;
+      animation: typing 1.4s infinite;
+    }
+  
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+  
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  
+    @keyframes typing {
+  
+      0%,
+      60%,
+      100% {
+        opacity: 0.3;
+      }
+  
+      30% {
+        opacity: 1;
+      }
+    }
+  
+    /* Form validation styles */
+    .field-error {
+      border-color: #ef4444 !important;
+      background-color: #fef2f2 !important;
+    }
+  
+    .field-success {
+      border-color: #10b981 !important;
+      background-color: #f0fdf4 !important;
+    }
   </style>
 </head>
 <body class="flex bg-gray-100">
@@ -49,74 +107,724 @@
     </div>
   </main>
 
+  <!-- AI Suggestions Section -->
+  <div id="aiSuggestions" class="mt-6 bg-blue-50 p-6 rounded-lg shadow max-w-2xl hidden">
+    <h3 class="text-lg font-semibold text-blue-800 mb-3">🤖 AI Assistant Suggestions</h3>
+    <div id="suggestionContent" class="text-sm text-blue-700"></div>
+  </div>
+  </main>
+  
   <!-- Floating Left Sidebar (Chatbot + Settings) -->
   <div class="fixed bottom-6 left-6 flex flex-col gap-4">
     <!-- Chatbot Button -->
-    <button id="chatToggle" class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700">
-      💬 <span>Chatbot</span>
+    <button id="chatToggle"
+      class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700 transition-all">
+      💬 <span>AI Assistant</span>
     </button>
-
+  
     <!-- Settings Button -->
-    <button id="settingsBtn" class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800">
+    <button id="settingsBtn"
+      class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800 transition-all">
       ⚙️ <span>Settings</span>
     </button>
   </div>
-
-  <!-- Chat Window -->
-  <div id="chatWindow" class="hidden fixed bottom-24 left-6 w-80 h-96 bg-white rounded-xl shadow-xl flex flex-col overflow-hidden">
-    <div class="bg-green-600 text-white p-3 font-bold">Food Setu Chatbot</div>
-    <div id="chatMessages" class="flex-1 p-3 overflow-y-auto text-sm space-y-2">
-      <div class="text-gray-600">👋 Hi! How can I help you today?</div>
+  
+  <!-- Enhanced Chat Window -->
+  <div id="chatWindow"
+    class="hidden fixed bottom-24 left-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+    <!-- Header -->
+    <div class="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 font-bold flex items-center justify-between">
+      <span>🤖 Food Setu AI Assistant</span>
+      <button id="closeChatBtn" class="text-white hover:text-gray-200 transition-colors">✕</button>
     </div>
-    <div class="p-3 border-t flex">
-      <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 border rounded-lg px-2 py-1 text-sm focus:outline-none">
-      <button onclick="sendMessage()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 text-sm">Send</button>
+  
+    <!-- Messages Container -->
+    <div id="chatMessages" class="flex-1 p-4 overflow-y-auto text-sm space-y-3 bg-gray-50">
+      <!-- Welcome message with options -->
+      <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+        <div class="text-gray-700 mb-3">
+          👋 <strong>Welcome to Add Listing!</strong> I can help you optimize your food donation. How can I assist?
+        </div>
+  
+        <!-- Chat Options -->
+        <div class="space-y-2" id="chatOptions">
+          <button onclick="handleChatOption('optimize')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            ⚡ <strong>Optimize My Listing</strong><br>
+            <span class="text-gray-600 text-xs">Get AI suggestions for better visibility</span>
+          </button>
+  
+          <button onclick="handleChatOption('timing')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            ⏰ <strong>Best Timing Tips</strong><br>
+            <span class="text-gray-600 text-xs">When to post for maximum impact</span>
+          </button>
+  
+          
+  
+          <button onclick="handleChatOption('help')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            ❓ <strong>Help & Tips</strong><br>
+            <span class="text-gray-600 text-xs">Get general guidance for food donations</span>
+          </button>
+  
+          <button onclick="handleChatOption('exit')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-red-50 hover:bg-red-100 transition-all text-sm text-red-700">
+            🚪 <strong>Exit Chat</strong><br>
+            <span class="text-red-600 text-xs">Close the assistant</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Input Area -->
+    <div class="p-3 border-t bg-white flex gap-2">
+      <input id="chatInput" type="text" placeholder="Ask me about optimizing your food listing..."
+        class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button onclick="sendMessage()"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm transition-colors">Send</button>
     </div>
   </div>
-
+  
   <!-- Settings Sidebar -->
-  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6">
+  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6 z-50">
     <h2 class="text-xl font-bold mb-4">⚙️ Settings</h2>
     <ul class="space-y-4">
-      <li><a href="#" class="text-gray-700 hover:text-green-600">👤 Profile Settings</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🔑 Login & Security</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🌙 Theme Preferences</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🔔 Notifications</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">👤 Profile Settings</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🔐 Login & Security</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🌙 Theme Preferences</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🔔 Notifications</a></li>
     </ul>
-    <button id="closeSettings" class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Close</button>
+    <button id="closeSettings"
+      class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors">Close</button>
   </div>
-
+  
+  <!-- Overlay for settings -->
+  <div id="settingsOverlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40" onclick="closeSettingsSidebar()">
+  </div>
+  
   <script>
-    // Chatbot toggle
+    // Enhanced Chatbot Functions for Add Listing Page
     const chatToggle = document.getElementById("chatToggle");
     const chatWindow = document.getElementById("chatWindow");
     const chatMessages = document.getElementById("chatMessages");
     const chatInput = document.getElementById("chatInput");
-    chatToggle.addEventListener("click", () => chatWindow.classList.toggle("hidden"));
+    const closeChatBtn = document.getElementById("closeChatBtn");
+    const aiSuggestions = document.getElementById("aiSuggestions");
+    const suggestionContent = document.getElementById("suggestionContent");
+
+    // Form elements
+    const form = document.getElementById("foodListingForm");
+    const businessName = document.getElementById("businessName");
+    const foodDescription = document.getElementById("foodDescription");
+    const quantity = document.getElementById("quantity");
+    const expiryDateTime = document.getElementById("expiryDateTime");
+    const pickupLocation = document.getElementById("pickupLocation");
+    const contactPhone = document.getElementById("contactPhone");
+    const additionalNotes = document.getElementById("additionalNotes");
+
+    chatToggle.addEventListener("click", () => {
+      chatWindow.classList.toggle("hidden");
+    });
+
+    closeChatBtn.addEventListener("click", () => {
+      chatWindow.classList.add("hidden");
+    });
+
+    function addMessage(message, isUser = false, isTyping = false) {
+      const msgDiv = document.createElement("div");
+
+      if (isTyping) {
+        msgDiv.className = "text-gray-600 text-sm";
+        msgDiv.innerHTML = `🤖 AI Assistant: <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span> typing...`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return msgDiv;
+      }
+
+      if (isUser) {
+        msgDiv.className = "text-right";
+        msgDiv.innerHTML = `<div class="inline-block bg-green-100 text-green-800 px-3 py-2 rounded-lg text-sm max-w-xs">${message}</div>`;
+      } else {
+        msgDiv.className = "text-left";
+        msgDiv.innerHTML = `<div class="inline-block bg-white border border-gray-200 px-3 py-2 rounded-lg text-sm max-w-xs shadow-sm">${message}</div>`;
+      }
+
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return msgDiv;
+    }
+
+    function handleChatOption(option) {
+      const optionTexts = {
+        'optimize': '⚡ Help me optimize my listing',
+        'timing': '⏰ Show best timing tips',
+        
+        'help': '❓ I need general help',
+        'exit': '🚪 Exit chat'
+      };
+
+      addMessage(optionTexts[option], true);
+
+      const typingMsg = addMessage('', false, true);
+
+      setTimeout(() => {
+        chatMessages.removeChild(typingMsg);
+
+        switch (option) {
+          case 'optimize':
+            optimizeListing();
+            break;
+          case 'timing':
+            showTimingTips();
+            break;
+          
+          case 'help':
+            showHelp();
+            break;
+          case 'exit':
+            chatWindow.classList.add("hidden");
+            break;
+        }
+      }, 1500);
+    }
+
+    function optimizeListing() {
+      // Analyze current form data
+      const currentData = {
+        business: businessName.value,
+        description: foodDescription.value,
+        quantity: quantity.value,
+        location: pickupLocation.value
+      };
+
+      let response = `🤖 <strong>Listing Optimization Analysis:</strong><br><br>`;
+
+      // Business name suggestions
+      if (currentData.business) {
+        response += `<div class="p-2 bg-green-50 rounded border-l-2 border-green-400 mb-2">
+            <strong>✅ Business Name:</strong> Good! "${currentData.business}" is clear and identifiable.
+          </div>`;
+      } else {
+        response += `<div class="p-2 bg-yellow-50 rounded border-l-2 border-yellow-400 mb-2">
+            <strong>⚠️ Business Name:</strong> Add your restaurant/business name for better trust.
+          </div>`;
+      }
+
+      // Description analysis
+      if (currentData.description) {
+        const wordCount = currentData.description.split(' ').length;
+        if (wordCount < 5) {
+          response += `<div class="p-2 bg-yellow-50 rounded border-l-2 border-yellow-400 mb-2">
+              <strong>⚠️ Description:</strong> Consider adding more details like food type, freshness, dietary info.
+            </div>`;
+        } else {
+          response += `<div class="p-2 bg-green-50 rounded border-l-2 border-green-400 mb-2">
+              <strong>✅ Description:</strong> Good detail level! NGOs will appreciate the information.
+            </div>`;
+        }
+      } else {
+        response += `<div class="p-2 bg-red-50 rounded border-l-2 border-red-400 mb-2">
+            <strong>❌ Description:</strong> Add food details to increase claim likelihood by 40%.
+          </div>`;
+      }
+
+      // Quantity suggestions
+      if (currentData.quantity) {
+        const qty = parseInt(currentData.quantity);
+        if (qty < 10) {
+          response += `<div class="p-2 bg-blue-50 rounded border-l-2 border-blue-400 mb-2">
+              <strong>💡 Quantity:</strong> Small batches (${qty} meals) are perfect for local NGOs.
+            </div>`;
+        } else if (qty > 50) {
+          response += `<div class="p-2 bg-purple-50 rounded border-l-2 border-purple-400 mb-2">
+              <strong>🏢 Quantity:</strong> Large batch (${qty} meals) - consider splitting for faster pickup.
+            </div>`;
+        } else {
+          response += `<div class="p-2 bg-green-50 rounded border-l-2 border-green-400 mb-2">
+              <strong>✅ Quantity:</strong> Perfect size (${qty} meals) for efficient distribution.
+            </div>`;
+        }
+      }
+
+      response += `<br><strong>🎯 Optimization Score: ${calculateOptimizationScore(currentData)}/100</strong>`;
+
+      addMessage(response);
+      showBackToMainOptions();
+
+      // Also show in main page
+      showAISuggestions('optimize', response);
+    }
+
+    function showTimingTips() {
+      const now = new Date();
+      const currentHour = now.getHours();
+      let response = `🤖 <strong>Best Timing Tips:</strong><br><br>`;
+
+      response += `<div class="space-y-2">
+          <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-400">
+            <strong>⏰ Current Time Analysis:</strong><br>
+            It's ${currentHour}:00 - ${getTimeAdvice(currentHour)}
+          </div>
+          
+          <div class="p-2 bg-green-50 rounded border-l-2 border-green-400">
+            <strong>📈 Peak Claim Hours:</strong><br>
+            • 11 AM - 1 PM (lunch planning)<br>
+            • 5 PM - 7 PM (dinner preparation)<br>
+            • Saturday mornings (weekend planning)
+          </div>
+          
+          <div class="p-2 bg-yellow-50 rounded border-l-2 border-yellow-400">
+            <strong>⚡ Quick Pickup Tips:</strong><br>
+            • List 2-4 hours before expiry<br>
+            • Add "urgent" for <2 hour expiry<br>
+            • Enable SMS notifications
+          </div>
+          
+          <div class="p-2 bg-purple-50 rounded border-l-2 border-purple-400">
+            <strong>📅 Day-wise Performance:</strong><br>
+            • Monday-Friday: 85% claim rate<br>
+            • Weekend: 92% claim rate<br>
+            • Festival days: 95% claim rate
+          </div>
+        </div>`;
+
+      addMessage(response);
+      showBackToMainOptions();
+      showAISuggestions('timing', response);
+    }
+
+    function validateForm() {
+      const validation = validateFormData();
+      let response = `🤖 <strong>Form Validation Results:</strong><br><br>`;
+
+      validation.forEach(item => {
+        const colorClass = item.valid ? 'green' : item.warning ? 'yellow' : 'red';
+        const icon = item.valid ? '✅' : item.warning ? '⚠️' : '❌';
+
+        response += `<div class="p-2 bg-${colorClass}-50 rounded border-l-2 border-${colorClass}-400 mb-2">
+            <strong>${icon} ${item.field}:</strong> ${item.message}
+          </div>`;
+      });
+
+      const completeness = Math.round((validation.filter(item => item.valid).length / validation.length) * 100);
+      response += `<br><strong>📊 Form Completeness: ${completeness}%</strong>`;
+
+      if (completeness === 100) {
+        response += `<br><br>🎉 <strong>Perfect!</strong> Your listing is ready to submit.`;
+      } else if (completeness >= 80) {
+        response += `<br><br>🚀 <strong>Almost there!</strong> Fix the highlighted issues above.`;
+      } else {
+        response += `<br><br>📝 <strong>Needs work!</strong> Complete the required fields for better results.`;
+      }
+
+      addMessage(response);
+      showBackToMainOptions();
+      showAISuggestions('validation', response);
+    }
+
+    function showHelp() {
+      let response = `🤖 <strong>Food Listing Help & Tips:</strong><br><br>`;
+
+      response += `<div class="space-y-2">
+          <div class="p-2 bg-green-50 rounded border-l-2 border-green-400">
+            <strong>📝 Writing Great Descriptions:</strong><br>
+            • Mention food type (veg/non-veg)<br>
+            • Include freshness ("just prepared")<br>
+            • Add serving details ("serves 20 people")
+          </div>
+          
+          <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-400">
+            <strong>📍 Location Best Practices:</strong><br>
+            • Include nearby landmark<br>
+            • Mention parking availability<br>
+            • Add floor/building details
+          </div>
+          
+          <div class="p-2 bg-yellow-50 rounded border-l-2 border-yellow-400">
+            <strong>📞 Contact Information:</strong><br>
+            • Use WhatsApp-enabled number<br>
+            • Ensure someone answers during pickup hours<br>
+            • Consider alternate contact for busy times
+          </div>
+          
+          <div class="p-2 bg-purple-50 rounded border-l-2 border-purple-400">
+            <strong>⏰ Expiry Time Guidelines:</strong><br>
+            • Cooked food: List within 2-4 hours<br>
+            • Packaged items: Check actual expiry<br>
+            • Baked goods: Same-day distribution best
+          </div>
+        </div>`;
+
+      response += `<br>💡 <strong>Pro Tip:</strong> Listings with photos get 60% more claims!`;
+
+      addMessage(response);
+      showBackToMainOptions();
+      showAISuggestions('help', response);
+    }
+
+    function showBackToMainOptions() {
+      setTimeout(() => {
+        const backMsg = document.createElement("div");
+        backMsg.className = "text-center mt-3";
+        backMsg.innerHTML = `
+            <button onclick="resetChatToMain()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition-colors">
+              🔙 Back to Main Menu
+            </button>
+          `;
+        chatMessages.appendChild(backMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+    }
+
+    function resetChatToMain() {
+      chatMessages.innerHTML = `
+          <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+            <div class="text-gray-700 mb-3">
+              👋 <strong>Welcome to Add Listing!</strong> I can help you optimize your food donation. How can I assist?
+            </div>
+            
+            <div class="space-y-2" id="chatOptions">
+              <button onclick="handleChatOption('optimize')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+                ⚡ <strong>Optimize My Listing</strong><br>
+                <span class="text-gray-600 text-xs">Get AI suggestions for better visibility</span>
+              </button>
+              
+              <button onclick="handleChatOption('timing')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+                ⏰ <strong>Best Timing Tips</strong><br>
+                <span class="text-gray-600 text-xs">When to post for maximum impact</span>
+              </button>
+              
+              <button onclick="handleChatOption('validation')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+                ✅ <strong>Validate My Form</strong><br>
+                <span class="text-gray-600 text-xs">Check if my listing is complete</span>
+              </button>
+              
+              <button onclick="handleChatOption('help')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+                ❓ <strong>Help & Tips</strong><br>
+                <span class="text-gray-600 text-xs">Get general guidance for food donations</span>
+              </button>
+              
+              <button onclick="handleChatOption('exit')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-red-50 hover:bg-red-100 transition-all text-sm text-red-700">
+                🚪 <strong>Exit Chat</strong><br>
+                <span class="text-red-600 text-xs">Close the assistant</span>
+              </button>
+            </div>
+          </div>
+        `;
+    }
+
     function sendMessage() {
       const message = chatInput.value.trim();
       if (!message) return;
-      const userMsg = document.createElement("div");
-      userMsg.className = "text-right text-sm text-blue-600";
-      userMsg.innerText = "You: " + message;
-      chatMessages.appendChild(userMsg);
+
+      addMessage(message, true);
+
+      const typingMsg = addMessage('', false, true);
+
       setTimeout(() => {
-        const botMsg = document.createElement("div");
-        botMsg.className = "text-gray-600 text-sm";
-        botMsg.innerText = "🤖 Bot: Thanks for your message! (demo reply)";
-        chatMessages.appendChild(botMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 500);
+        chatMessages.removeChild(typingMsg);
+
+        // AI response logic for add listing
+        let response = "🤖 Thanks for your message! ";
+
+        if (message.toLowerCase().includes('optim')) {
+          response += "I can help optimize your listing! Click 'Optimize My Listing' above for detailed suggestions.";
+        } else if (message.toLowerCase().includes('valid') || message.toLowerCase().includes('check')) {
+          response += "I can validate your form data. Click 'Validate My Form' above to get a complete analysis.";
+        } else if (message.toLowerCase().includes('time') || message.toLowerCase().includes('when')) {
+          response += "Great question about timing! Click 'Best Timing Tips' above for data-driven insights.";
+        } else if (message.toLowerCase().includes('help')) {
+          response += "I'm here to help! Use the option buttons above for specific assistance with your food listing.";
+        } else {
+          response += "I understand you need assistance with your food listing. Please use the option buttons above for the best help tailored to your needs.";
+        }
+
+        addMessage(response);
+        showBackToMainOptions();
+      }, 1000);
+
       chatInput.value = "";
-      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Settings Sidebar toggle
+    // Helper functions
+    function calculateOptimizationScore(data) {
+      let score = 0;
+      if (data.business) score += 25;
+      if (data.description && data.description.split(' ').length >= 5) score += 25;
+      if (data.quantity && parseInt(data.quantity) > 0) score += 25;
+      if (data.location) score += 25;
+      return score;
+    }
+
+    function getTimeAdvice(hour) {
+      if (hour >= 11 && hour <= 13) return "Perfect time for lunch donations!";
+      if (hour >= 17 && hour <= 19) return "Great timing for dinner pickups!";
+      if (hour >= 8 && hour <= 10) return "Good for breakfast items.";
+      if (hour >= 14 && hour <= 16) return "Quiet period - consider waiting for peak hours.";
+      return "Off-peak time - urgent listings work best now.";
+    }
+
+    function validateFormData() {
+      return [
+        {
+          field: 'Business Name',
+          valid: businessName.value.length > 0,
+          message: businessName.value.length > 0 ? 'Looks good!' : 'Required field - add your business name'
+        },
+        {
+          field: 'Food Description',
+          valid: foodDescription.value.length >= 10,
+          warning: foodDescription.value.length > 0 && foodDescription.value.length < 10,
+          message: foodDescription.value.length >= 10 ? 'Good detail level!' :
+            foodDescription.value.length > 0 ? 'Add more details for better results' : 'Required field'
+        },
+        {
+          field: 'Quantity',
+          valid: quantity.value > 0,
+          message: quantity.value > 0 ? `${quantity.value} meals - good!` : 'Enter number of meals available'
+        },
+        {
+          field: 'Expiry Date',
+          valid: expiryDateTime.value.length > 0,
+          message: expiryDateTime.value.length > 0 ? 'Date set properly' : 'Set pickup deadline'
+        },
+        {
+          field: 'Pickup Location',
+          valid: pickupLocation.value.length > 10,
+          warning: pickupLocation.value.length > 0 && pickupLocation.value.length <= 10,
+          message: pickupLocation.value.length > 10 ? 'Detailed address provided' :
+            pickupLocation.value.length > 0 ? 'Add more location details' : 'Required field'
+        },
+        {
+          field: 'Contact Phone',
+          valid: /^\+?[\d\s-()]+$/.test(contactPhone.value) && contactPhone.value.length >= 10,
+          message: /^\+?[\d\s-()]+$/.test(contactPhone.value) && contactPhone.value.length >= 10 ?
+            'Valid phone number' : 'Enter valid phone number'
+        }
+      ];
+    }
+
+    function showAISuggestions(type, content) {
+      aiSuggestions.classList.remove('hidden');
+      suggestionContent.innerHTML = content;
+
+      // Auto-hide after 10 seconds
+      setTimeout(() => {
+        aiSuggestions.classList.add('hidden');
+      }, 10000);
+    }
+
+    // Enter key support
+    chatInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
+    });
+
+    // Settings functionality
     const settingsBtn = document.getElementById("settingsBtn");
     const settingsSidebar = document.getElementById("settingsSidebar");
+    const settingsOverlay = document.getElementById("settingsOverlay");
     const closeSettings = document.getElementById("closeSettings");
-    settingsBtn.addEventListener("click", () => settingsSidebar.classList.add("show"));
-    closeSettings.addEventListener("click", () => settingsSidebar.classList.remove("show"));
+
+    function openSettingsSidebar() {
+      settingsSidebar.classList.add("show");
+      settingsOverlay.classList.remove("hidden");
+    }
+
+    function closeSettingsSidebar() {
+      settingsSidebar.classList.remove("show");
+      settingsOverlay.classList.add("hidden");
+    }
+
+    settingsBtn.addEventListener("click", openSettingsSidebar);
+    closeSettings.addEventListener("click", closeSettingsSidebar);
+
+    // Real-time form validation with visual feedback
+    function addValidationListeners() {
+      const fields = [businessName, foodDescription, quantity, expiryDateTime, pickupLocation, contactPhone];
+
+      fields.forEach(field => {
+        field.addEventListener('input', () => {
+          validateFieldRealTime(field);
+        });
+
+        field.addEventListener('blur', () => {
+          validateFieldRealTime(field);
+        });
+      });
+    }
+
+    function validateFieldRealTime(field) {
+      const validation = validateFormData();
+      const fieldName = field.id;
+      let fieldValidation;
+
+      // Map field IDs to validation results
+      switch (fieldName) {
+        case 'businessName':
+          fieldValidation = validation[0];
+          break;
+        case 'foodDescription':
+          fieldValidation = validation[1];
+          break;
+        case 'quantity':
+          fieldValidation = validation[2];
+          break;
+        case 'expiryDateTime':
+          fieldValidation = validation[3];
+          break;
+        case 'pickupLocation':
+          fieldValidation = validation[4];
+          break;
+        case 'contactPhone':
+          fieldValidation = validation[5];
+          break;
+      }
+
+      if (fieldValidation) {
+        field.classList.remove('field-error', 'field-success');
+
+        if (fieldValidation.valid) {
+          field.classList.add('field-success');
+        } else if (!fieldValidation.warning) {
+          field.classList.add('field-error');
+        }
+      }
+    }
+
+    // Initialize real-time validation
+    addValidationListeners();
+
+    // Enhanced form submission with AI feedback
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const validation = validateFormData();
+      const allValid = validation.every(item => item.valid);
+
+      if (allValid) {
+        // Show success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'fixed top-4 right-4 bg-green-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+        successDiv.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span>✅</span>
+              <div>
+                <div class="font-semibold">Food listing submitted successfully!</div>
+                <div class="text-sm opacity-90">NGOs will be notified immediately</div>
+              </div>
+            </div>
+          `;
+        document.body.appendChild(successDiv);
+
+        // Auto-remove success message
+        setTimeout(() => {
+          document.body.removeChild(successDiv);
+        }, 5000);
+
+        // Show AI success analysis
+        showAISuccessAnalysis();
+
+        // Reset form
+        form.reset();
+        aiSuggestions.classList.add('hidden');
+
+      } else {
+        // Show validation errors
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'fixed top-4 right-4 bg-red-500 text-white px-6 py-4 rounded-lg shadow-lg z-50';
+        errorDiv.innerHTML = `
+            <div class="flex items-center gap-2">
+              <span>❌</span>
+              <div>
+                <div class="font-semibold">Please fix the errors below</div>
+                <div class="text-sm opacity-90">Check highlighted fields</div>
+              </div>
+            </div>
+          `;
+        document.body.appendChild(errorDiv);
+
+        setTimeout(() => {
+          document.body.removeChild(errorDiv);
+        }, 4000);
+
+        // Auto-trigger validation in chat
+        handleChatOption('validation');
+      }
+    });
+
+    function showAISuccessAnalysis() {
+      const currentData = {
+        business: businessName.value,
+        description: foodDescription.value,
+        quantity: quantity.value,
+        location: pickupLocation.value
+      };
+
+      const score = calculateOptimizationScore(currentData);
+      const estimatedClaims = Math.round((score / 100) * parseInt(currentData.quantity) * 0.8);
+
+      let successContent = `
+          <div class="space-y-3">
+            <div class="text-center">
+              <div class="text-2xl">🎉</div>
+              <div class="font-semibold text-green-800">Listing Published Successfully!</div>
+            </div>
+            
+            <div class="bg-white p-3 rounded border-l-4 border-green-500">
+              <div class="font-semibold text-green-800">AI Prediction:</div>
+              <div class="text-sm text-green-700">
+                • Expected claims: <strong>${estimatedClaims} meals</strong><br>
+                • Estimated pickup time: <strong>2-4 hours</strong><br>
+                • Optimization score: <strong>${score}/100</strong>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 p-3 rounded border-l-4 border-blue-400">
+              <div class="font-semibold text-blue-800">Next Steps:</div>
+              <div class="text-sm text-blue-700">
+                • Check your phone for NGO calls<br>
+                • Prepare food for pickup<br>
+                • Track impact in Order History
+              </div>
+            </div>
+          </div>
+        `;
+
+      showAISuggestions('success', successContent);
+    }
+
+    // Auto-fill current date/time + 2 hours as default expiry
+    function setDefaultExpiryTime() {
+      const now = new Date();
+      now.setHours(now.getHours() + 2);
+      const formatted = now.toISOString().slice(0, 16);
+      expiryDateTime.value = formatted;
+    }
+
+    // Set default expiry time on page load
+    window.addEventListener('load', () => {
+      setDefaultExpiryTime();
+    });
+
+    // Smart suggestions based on business name
+    businessName.addEventListener('input', function () {
+      const name = this.value.toLowerCase();
+      if (name.includes('mcdon')) {
+        foodDescription.placeholder = "e.g., Fresh burgers, fries, and cold drinks";
+      } else if (name.includes('pizza') || name.includes('domino')) {
+        foodDescription.placeholder = "e.g., Hot pizzas and garlic bread";
+      } else if (name.includes('subway')) {
+        foodDescription.placeholder = "e.g., Fresh sandwiches and salads";
+      } else if (name.includes('kfc')) {
+        foodDescription.placeholder = "e.g., Fried chicken and sides";
+      } else {
+        foodDescription.placeholder = "e.g., Fresh sandwiches, salads, and drinks";
+      }
+    });
+
   </script>
 
 </body>
