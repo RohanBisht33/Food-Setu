@@ -192,6 +192,21 @@
                     </div>
                 </div>
             </section>
+                        <!-- Prediction Graph Section -->
+                        <section id="prediction-graph" class="py-20 bg-gray-50">
+                            <div class="container mx-auto px-6 text-center">
+                                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4 font-poppins">
+                                    Predicted Food Waste Saved
+                                </h2>
+                                <p class="text-lg text-gray-600 max-w-2xl mx-auto mb-8">
+                                    A projection of how much food waste can be prevented using our platform over the coming months.
+                                </p>
+                                <div class="bg-white p-6 rounded-xl shadow-lg">
+                                    <canvas id="wastePredictionChart" height="100"></canvas>
+                                </div>
+                            </div>
+                        </section>
+
         </main>
 
         <!-- Footer Section -->
@@ -204,6 +219,53 @@
 
         <!-- Link to your JavaScript file -->
         <script src="script.js"></script>
+        <!-- Chart.js CDN -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script>
+            const ctx = document.getElementById('wastePredictionChart').getContext('2d');
+            const wastePredictionChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug"],
+                    datasets: [{
+                        label: "Food Saved (tons)",
+                        data: [500, 1200, 2200, 3500, 4800, 6500, 8200, 10000],
+                        fill: true,
+                        borderColor: "#16a34a",
+                        backgroundColor: "rgba(34,197,94,0.2)",
+                        tension: 0.3,
+                        pointBackgroundColor: "#16a34a",
+                        pointBorderWidth: 2,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            labels: {
+                                color: "#374151",
+                                font: {
+                                    family: "Poppins",
+                                    size: 14
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: { color: "#4b5563" },
+                            grid: { color: "#e5e7eb" }
+                        },
+                        y: {
+                            ticks: { color: "#4b5563" },
+                            grid: { color: "#e5e7eb" }
+                        }
+                    }
+                }
+            });
+        </script>
+
     </body>
 
     </html>
