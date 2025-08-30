@@ -69,16 +69,3 @@ This creates an imbalance:
 # Clone the repo
 git clone https://github.com/RohanBisht33/Food-Setu.git
 
-# Go to project folder
-cd foodsetu
-
-# Install dependencies
-npm install
-
-# Run backend
-npm start
-
-# Run frontend (React Native)
-npx react-native run-android   # for Android
-npx react-native run-ios       # for iOS
-
