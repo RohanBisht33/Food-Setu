@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,28 +13,82 @@
       transform: translateY(5px);
       transition: opacity 0.3s ease, transform 0.3s ease;
     }
+
     #chatTooltip.show {
       opacity: 1;
       transform: translateY(0);
     }
+
     /* Settings Sidebar Animation */
     #settingsSidebar {
       transition: transform 0.3s ease;
       transform: translateX(-100%);
     }
+
     #settingsSidebar.show {
       transform: translateX(0);
     }
+
     /* Scroll Down Indicator */
     .scroll-indicator {
       animation: bounce 1.5s infinite;
     }
+
     @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(8px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(8px);
+      }
+    }
+
+    /* Chatbot Options Animation */
+    .chat-option {
+      transition: all 0.2s ease;
+    }
+
+    .chat-option:hover {
+      transform: translateX(4px);
+      background-color: #f0f9ff;
+    }
+
+    /* Typing indicator animation */
+    .typing-dots {
+      display: inline-block;
+    }
+
+    .typing-dots span {
+      display: inline-block;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dots span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dots span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+
+      0%,
+      60%,
+      100% {
+        opacity: 0.3;
+      }
+
+      30% {
+        opacity: 1;
+      }
     }
   </style>
 </head>
+
 <body class="flex bg-gray-100">
 
   <!-- Sidebar -->
@@ -53,7 +108,7 @@
 
     <!-- Map Section -->
     <section class="relative h-[500px] w-full">
-      <iframe 
+      <iframe
         src="https://www.openstreetmap.org/export/embed.html?bbox=77.1%2C28.6%2C77.3%2C28.7&layer=mapnik&marker=28.65%2C77.2"
         class="w-full h-full border-0 rounded-b-lg shadow-lg">
       </iframe>
@@ -61,9 +116,9 @@
 
     <!-- Scroll Indicator BELOW map (Centered) -->
     <div class="flex justify-center mt-4">
-      <div id="scrollBtn" 
-         class="bg-white px-6 py-2 rounded-full bottom-6 shadow-md cursor-pointer hover:bg-green-600 hover:text-white scroll-indicator">
-      ⬇️ Scroll Down
+      <div id="scrollBtn"
+        class="bg-white px-6 py-2 rounded-full bottom-6 shadow-md cursor-pointer hover:bg-green-600 hover:text-white scroll-indicator">
+        ⬇️ Scroll Down
       </div>
     </div>
 
@@ -101,18 +156,21 @@
 
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
           <div>
-            <h3 class="text-lg font-semibold">Haldiram’s - Connaught Place</h3>
+            <h3 class="text-lg font-semibold">Haldiram's - Connaught Place</h3>
             <p class="text-gray-600">50 Meals · Expiry: <span class="text-red-600 font-semibold">2 hrs left</span></p>
           </div>
-          <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
+          <button onclick="claimFood(this)"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center">
           <div>
             <h3 class="text-lg font-semibold">Bikanervala - Karol Bagh</h3>
-            <p class="text-gray-600">30 Meals · Expiry: <span class="text-yellow-600 font-semibold">5 hrs left</span></p>
+            <p class="text-gray-600">30 Meals · Expiry: <span class="text-yellow-600 font-semibold">5 hrs left</span>
+            </p>
           </div>
-          <button onclick="claimFood(this)" class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
+          <button onclick="claimFood(this)"
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600">Claim</button>
         </div>
 
         <div class="bg-white p-6 rounded-xl shadow-lg flex justify-between items-center opacity-70">
@@ -153,42 +211,110 @@
   <!-- Floating Left Sidebar (Chatbot + Settings) -->
   <div class="fixed bottom-6 left-6 flex flex-col gap-4">
     <!-- Chatbot Button -->
-    <button id="chatToggle" class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700">
-      💬 <span>Chatbot</span>
+    <button id="chatToggle"
+      class="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full shadow-lg hover:bg-green-700 transition-all">
+      💬 <span>AI Assistant</span>
     </button>
 
     <!-- Settings Button -->
-    <button id="settingsBtn" class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800">
+    <button id="settingsBtn"
+      class="flex items-center gap-2 bg-gray-700 text-white px-4 py-2 rounded-full shadow-lg hover:bg-gray-800 transition-all">
       ⚙️ <span>Settings</span>
     </button>
   </div>
 
-  <!-- Chat Window -->
-  <div id="chatWindow" class="hidden fixed bottom-24 left-6 w-80 h-96 bg-white rounded-xl shadow-xl flex flex-col overflow-hidden">
-    <div class="bg-green-600 text-white p-3 font-bold">Food Setu Chatbot</div>
-    <div id="chatMessages" class="flex-1 p-3 overflow-y-auto text-sm space-y-2">
-      <div class="text-gray-600">👋 Hi! How can I help you today?</div>
+  <!-- Enhanced Chat Window -->
+  <div id="chatWindow"
+    class="hidden fixed bottom-24 left-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden border border-gray-200">
+    <!-- Header -->
+    <div
+      class="bg-gradient-to-r from-green-600 to-green-700 text-white p-4 font-bold flex items-center justify-between">
+      <span>🤖 Food Setu AI Assistant</span>
+      <button id="closeChatBtn" class="text-white hover:text-gray-200 transition-colors">✕</button>
     </div>
-    <div class="p-3 border-t flex">
-      <input id="chatInput" type="text" placeholder="Type a message..." class="flex-1 border rounded-lg px-2 py-1 text-sm focus:outline-none">
-      <button onclick="sendMessage()" class="ml-2 bg-green-600 text-white px-3 py-1 rounded-lg hover:bg-green-700 text-sm">Send</button>
+
+    <!-- Messages Container -->
+    <div id="chatMessages" class="flex-1 p-4 overflow-y-auto text-sm space-y-3 bg-gray-50">
+      <!-- Welcome message with options -->
+      <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+        <div class="text-gray-700 mb-3">
+          👋 <strong>Welcome!</strong> I'm your Food Setu AI Assistant. How can I help you today?
+        </div>
+
+        <!-- Chat Options -->
+        <div class="space-y-2" id="chatOptions">
+          <button onclick="handleChatOption('nearby')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            🍽️ <strong>Review Nearby Free Food</strong><br>
+            <span class="text-gray-600 text-xs">Find available food donations near you</span>
+          </button>
+
+          <button onclick="handleChatOption('predict')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            📊 <strong>Predict Future Surplus Data</strong><br>
+            <span class="text-gray-600 text-xs">AI-powered food waste predictions</span>
+          </button>
+
+          <button onclick="handleChatOption('help')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+            ❓ <strong>Help & Support</strong><br>
+            <span class="text-gray-600 text-xs">Get assistance with the platform</span>
+          </button>
+
+          <button onclick="handleChatOption('exit')"
+            class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-red-50 hover:bg-red-100 transition-all text-sm text-red-700">
+            🚪 <strong>Exit Chat</strong><br>
+            <span class="text-red-600 text-xs">Close the assistant</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="p-3 border-t bg-white flex gap-2">
+      <input id="chatInput" type="text" placeholder="Type a message or select an option above..."
+        class="flex-1 border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+      <button onclick="sendMessage()"
+        class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 text-sm transition-colors">Send</button>
     </div>
   </div>
 
   <!-- Settings Sidebar -->
-  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6">
+  <div id="settingsSidebar" class="fixed top-0 left-0 w-64 h-full bg-white shadow-2xl p-6 z-50">
     <h2 class="text-xl font-bold mb-4">⚙️ Settings</h2>
     <ul class="space-y-4">
-      <li><a href="#" class="text-gray-700 hover:text-green-600">👤 Profile Settings</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🔑 Login & Security</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🌙 Theme Preferences</a></li>
-      <li><a href="#" class="text-gray-700 hover:text-green-600">🔔 Notifications</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">👤 Profile Settings</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🔐 Login & Security</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🌙 Theme Preferences</a></li>
+      <li><a href="#" class="text-gray-700 hover:text-green-600 transition-colors">🔔 Notifications</a></li>
     </ul>
-    <button id="closeSettings" class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Close</button>
+    <button id="closeSettings"
+      class="mt-6 w-full bg-red-500 text-white py-2 rounded-lg hover:bg-red-600 transition-colors">Close</button>
+  </div>
+
+  <!-- Overlay for settings -->
+  <div id="settingsOverlay" class="fixed inset-0 bg-black bg-opacity-30 hidden z-40" onclick="closeSettingsSidebar()">
   </div>
 
   <script>
     let claims = 950;
+    let currentChatSession = 'main';
+
+    // Demo data for AI responses
+    const demoData = {
+      nearbyFood: [
+        { name: "McDonald's - CP", meals: 25, distance: "0.5 km", expiry: "1 hr", rating: 4.2 },
+        { name: "Domino's - Karol Bagh", meals: 15, distance: "1.2 km", expiry: "3 hrs", rating: 4.0 },
+        { name: "Subway - Rajouri Garden", meals: 20, distance: "2.1 km", expiry: "2 hrs", rating: 4.3 },
+        { name: "KFC - Lajpat Nagar", meals: 30, distance: "1.8 km", expiry: "4 hrs", rating: 3.9 }
+      ],
+      predictions: {
+        today: { surplus: 450, hotspots: ["CP", "Karol Bagh", "Noida"] },
+        tomorrow: { surplus: 520, hotspots: ["Gurgaon", "Dwarka", "CP"] },
+        thisWeek: { surplus: 2840, trend: "increasing" }
+      }
+    };
+
     function claimFood(button) {
       const card = button.parentElement;
       button.remove();
@@ -200,49 +326,261 @@
       document.getElementById("claimsCount").innerText = claims + "+";
     }
 
-    // Chatbot
+    // Enhanced Chatbot Functions
     const chatToggle = document.getElementById("chatToggle");
     const chatWindow = document.getElementById("chatWindow");
     const chatMessages = document.getElementById("chatMessages");
     const chatInput = document.getElementById("chatInput");
+    const closeChatBtn = document.getElementById("closeChatBtn");
+
     chatToggle.addEventListener("click", () => {
       chatWindow.classList.toggle("hidden");
     });
+
+    closeChatBtn.addEventListener("click", () => {
+      chatWindow.classList.add("hidden");
+    });
+
+    function addMessage(message, isUser = false, isTyping = false) {
+      const msgDiv = document.createElement("div");
+
+      if (isTyping) {
+        msgDiv.className = "text-gray-600 text-sm";
+        msgDiv.innerHTML = `🤖 AI Assistant: <span class="typing-dots"><span>.</span><span>.</span><span>.</span></span> typing...`;
+        chatMessages.appendChild(msgDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return msgDiv;
+      }
+
+      if (isUser) {
+        msgDiv.className = "text-right";
+        msgDiv.innerHTML = `<div class="inline-block bg-green-100 text-green-800 px-3 py-2 rounded-lg text-sm max-w-xs">${message}</div>`;
+      } else {
+        msgDiv.className = "text-left";
+        msgDiv.innerHTML = `<div class="inline-block bg-white border border-gray-200 px-3 py-2 rounded-lg text-sm max-w-xs shadow-sm">${message}</div>`;
+      }
+
+      chatMessages.appendChild(msgDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+      return msgDiv;
+    }
+
+    function handleChatOption(option) {
+      const optionTexts = {
+        'nearby': '🍽️ Show me nearby free food options',
+        'predict': '📊 Show future surplus predictions',
+        'help': '❓ I need help with the platform',
+        'exit': '🚪 Exit chat'
+      };
+
+      addMessage(optionTexts[option], true);
+
+      const typingMsg = addMessage('', false, true);
+
+      setTimeout(() => {
+        chatMessages.removeChild(typingMsg);
+
+        switch (option) {
+          case 'nearby':
+            showNearbyFood();
+            break;
+          case 'predict':
+            showPredictions();
+            break;
+          case 'help':
+            showHelp();
+            break;
+          case 'exit':
+            chatWindow.classList.add("hidden");
+            break;
+        }
+      }, 1500);
+    }
+
+    function showNearbyFood() {
+      let response = `🤖 <strong>Nearby Free Food Options:</strong><br><br>`;
+
+      demoData.nearbyFood.forEach((food, index) => {
+        const urgencyColor = food.expiry.includes('1 hr') ? 'text-red-600' :
+          food.expiry.includes('2 hr') ? 'text-orange-600' : 'text-green-600';
+        response += `<div class="mb-2 p-2 bg-gray-50 rounded border-l-2 border-green-400">
+          <strong>${food.name}</strong><br>
+          📍 ${food.distance} away | 🍽️ ${food.meals} meals<br>
+          ⏰ <span class="${urgencyColor}">${food.expiry} left</span> | ⭐ ${food.rating}/5
+        </div>`;
+      });
+
+      response += `<br>🔄 <em>Would you like me to help you claim any of these?</em>`;
+      addMessage(response);
+      showBackToMainOptions();
+    }
+
+    function showPredictions() {
+      const pred = demoData.predictions;
+      let response = `🤖 <strong>AI Surplus Predictions:</strong><br><br>`;
+
+      response += `<div class="space-y-2">
+        <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-400">
+          <strong>📅 Today:</strong><br>
+          Expected surplus: <strong>${pred.today.surplus} meals</strong><br>
+          Hot spots: ${pred.today.hotspots.join(', ')}
+        </div>
+        
+        <div class="p-2 bg-green-50 rounded border-l-2 border-green-400">
+          <strong>📅 Tomorrow:</strong><br>
+          Expected surplus: <strong>${pred.tomorrow.surplus} meals</strong><br>
+          Hot spots: ${pred.tomorrow.hotspots.join(', ')}
+        </div>
+        
+        <div class="p-2 bg-purple-50 rounded border-l-2 border-purple-400">
+          <strong>📊 This Week:</strong><br>
+          Total predicted: <strong>${pred.thisWeek.surplus} meals</strong><br>
+          Trend: <strong>${pred.thisWeek.trend}</strong> 📈
+        </div>
+      </div>`;
+
+      response += `<br>💡 <em>Based on historical data and current patterns</em>`;
+      addMessage(response);
+      showBackToMainOptions();
+    }
+
+    function showHelp() {
+      let response = `🤖 <strong>Food Setu Help Center:</strong><br><br>`;
+
+      response += `<div class="space-y-2">
+        <div class="p-2 bg-yellow-50 rounded border-l-2 border-yellow-400">
+          <strong>🍽️ How to Claim Food:</strong><br>
+          Click the "Claim" button next to any listing
+        </div>
+        
+        <div class="p-2 bg-blue-50 rounded border-l-2 border-blue-400">
+          <strong>➕ Add Food Listing:</strong><br>
+          Use the sidebar menu to add your surplus food
+        </div>
+        
+        <div class="p-2 bg-green-50 rounded border-l-2 border-green-400">
+          <strong>🚚 Route Optimization:</strong><br>
+          Plan efficient pickup routes for multiple locations
+        </div>
+        
+        <div class="p-2 bg-purple-50 rounded border-l-2 border-purple-400">
+          <strong>🤝 Sponsorship:</strong><br>
+          Connect with sponsors to support food rescue efforts
+        </div>
+      </div>`;
+
+      response += `<br>📞 <strong>Need more help?</strong><br>Contact: support@foodsetu.org<br>📱 Helpline: 1800-FOOD-HELP`;
+      addMessage(response);
+      showBackToMainOptions();
+    }
+
+    function showBackToMainOptions() {
+      setTimeout(() => {
+        const backMsg = document.createElement("div");
+        backMsg.className = "text-center mt-3";
+        backMsg.innerHTML = `
+          <button onclick="resetChatToMain()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-green-700 transition-colors">
+            🔙 Back to Main Menu
+          </button>
+        `;
+        chatMessages.appendChild(backMsg);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }, 500);
+    }
+
+    function resetChatToMain() {
+      chatMessages.innerHTML = `
+        <div class="bg-white p-3 rounded-lg shadow-sm border-l-4 border-green-500">
+          <div class="text-gray-700 mb-3">
+            👋 <strong>Welcome!</strong> I'm your Food Setu AI Assistant. How can I help you today?
+          </div>
+          
+          <div class="space-y-2" id="chatOptions">
+            <button onclick="handleChatOption('nearby')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+              🍽️ <strong>Review Nearby Free Food</strong><br>
+              <span class="text-gray-600 text-xs">Find available food donations near you</span>
+            </button>
+            
+            <button onclick="handleChatOption('predict')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+              📊 <strong>Predict Future Surplus Data</strong><br>
+              <span class="text-gray-600 text-xs">AI-powered food waste predictions</span>
+            </button>
+            
+            <button onclick="handleChatOption('help')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-gray-50 hover:bg-blue-50 transition-all text-sm">
+              ❓ <strong>Help & Support</strong><br>
+              <span class="text-gray-600 text-xs">Get assistance with the platform</span>
+            </button>
+            
+            <button onclick="handleChatOption('exit')" class="chat-option w-full text-left p-2 rounded-lg border border-gray-200 bg-red-50 hover:bg-red-100 transition-all text-sm text-red-700">
+              🚪 <strong>Exit Chat</strong><br>
+              <span class="text-red-600 text-xs">Close the assistant</span>
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
     function sendMessage() {
       const message = chatInput.value.trim();
       if (!message) return;
-      const userMsg = document.createElement("div");
-      userMsg.className = "text-right text-sm text-blue-600";
-      userMsg.innerText = "You: " + message;
-      chatMessages.appendChild(userMsg);
+
+      addMessage(message, true);
+
+      const typingMsg = addMessage('', false, true);
+
       setTimeout(() => {
-        const botMsg = document.createElement("div");
-        botMsg.className = "text-gray-600 text-sm";
-        botMsg.innerText = "🤖 Bot: Thanks for your message! (demo reply)";
-        chatMessages.appendChild(botMsg);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 500);
+        chatMessages.removeChild(typingMsg);
+
+        // Simple AI response logic
+        let response = "🤖 Thanks for your message! ";
+
+        if (message.toLowerCase().includes('food') || message.toLowerCase().includes('meal')) {
+          response += "I can help you find nearby food options. Would you like me to show available listings?";
+        } else if (message.toLowerCase().includes('help')) {
+          response += "I'm here to assist! Try clicking one of the option buttons above for specific help.";
+        } else {
+          response += "I understand you're looking for assistance. Please use the option buttons above for the best help, or type 'food' to find nearby options.";
+        }
+
+        addMessage(response);
+        showBackToMainOptions();
+      }, 1000);
+
       chatInput.value = "";
-      chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    // Settings
-    const settingsBtn = document.getElementById("settingsBtn");
-    const settingsSidebar = document.getElementById("settingsSidebar");
-    const closeSettings = document.getElementById("closeSettings");
-    settingsSidebar.classList.remove("show"); 
-    settingsBtn.addEventListener("click", () => {
-      settingsSidebar.classList.add("show");
-    });
-    closeSettings.addEventListener("click", () => {
-      settingsSidebar.classList.remove("show");
+    // Enter key support
+    chatInput.addEventListener("keypress", function (e) {
+      if (e.key === "Enter") {
+        sendMessage();
+      }
     });
 
-    // Scroll Down Smooth
+    // Settings functionality
+    const settingsBtn = document.getElementById("settingsBtn");
+    const settingsSidebar = document.getElementById("settingsSidebar");
+    const settingsOverlay = document.getElementById("settingsOverlay");
+    const closeSettings = document.getElementById("closeSettings");
+
+    function openSettingsSidebar() {
+      settingsSidebar.classList.add("show");
+      settingsOverlay.classList.remove("hidden");
+    }
+
+    function closeSettingsSidebar() {
+      settingsSidebar.classList.remove("show");
+      settingsOverlay.classList.add("hidden");
+    }
+
+    settingsBtn.addEventListener("click", openSettingsSidebar);
+    closeSettings.addEventListener("click", closeSettingsSidebar);
+
+    // Scroll functionality
     const scrollBtn = document.getElementById("scrollBtn");
     scrollBtn.addEventListener("click", () => {
       window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
     });
   </script>
 </body>
+
 </html>
